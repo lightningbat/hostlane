@@ -1,0 +1,71 @@
+.topbar {
+  height: $topbar-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $space-6;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-base);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  @include mobile {
+    padding: 0 $space-4;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  &__menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-md;
+    color: var(--text-secondary);
+    transition: color $transition-fast, background $transition-fast;
+
+    &:hover {
+      color: var(--text-primary);
+      background: var(--bg-hover);
+    }
+
+    // Only show on mobile
+    @include mobile { display: flex; }
+  }
+
+  &__title {
+    font-size: $text-md;
+    font-weight: $weight-semibold;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  &__theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: $radius-md;
+    color: var(--text-tertiary);
+    transition: color $transition-fast, background $transition-fast;
+
+    &:hover {
+      color: var(--text-primary);
+      background: var(--bg-hover);
+    }
+  }
+}

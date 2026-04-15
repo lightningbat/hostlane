@@ -1,0 +1,208 @@
+.sidebar {
+  width: $sidebar-width;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  z-index: 200;
+  flex-shrink: 0;
+
+  // ── Mobile: hidden off-screen by default ────────────────
+  @include mobile {
+    transform: translateX(-100%);
+    transition: transform $transition-base;
+    box-shadow: none;
+
+    &--open {
+      transform: translateX(0);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  // ── Logo ────────────────────────────────────────────────
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: 0 $space-4;
+    height: $topbar-height;
+    border-bottom: 1px solid var(--sidebar-border);
+    flex-shrink: 0;
+  }
+
+  &__logo-mark {
+    width: 24px;
+    height: 24px;
+    background: var(--accent);
+    color: #fff;
+    font-size: $text-sm;
+    font-weight: $weight-semibold;
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__logo-text {
+    font-size: $text-base;
+    font-weight: $weight-semibold;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    flex: 1;
+  }
+
+  // Close button — only visible on mobile
+  &__close {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: $radius-md;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+    transition: color $transition-fast, background $transition-fast;
+
+    &:hover { color: var(--text-primary); background: var(--bg-hover); }
+
+    @include mobile { display: flex; }
+  }
+
+  // ── Nav ─────────────────────────────────────────────────
+  &__nav {
+    flex: 1;
+    padding: $space-3;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-y: auto;
+  }
+
+  &__nav-item {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-3;
+    border-radius: $radius-md;
+    font-size: $text-sm;
+    font-weight: $weight-medium;
+    color: var(--text-tertiary);
+    transition: color $transition-fast, background $transition-fast;
+    text-decoration: none;
+
+    @include mobile {
+      padding: $space-3 $space-4;
+      font-size: $text-md;
+    }
+
+    &:hover {
+      color: var(--text-primary);
+      background: var(--bg-hover);
+    }
+
+    &--active {
+      color: var(--text-primary);
+      background: var(--bg-active);
+    }
+  }
+
+  // ── Backdrop ─────────────────────────────────────────────
+  &__backdrop {
+    display: none;
+
+    @include mobile {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 199;
+      backdrop-filter: blur(2px);
+    }
+  }
+
+  // ── Footer ──────────────────────────────────────────────
+  &__footer {
+    padding: $space-3;
+    border-top: 1px solid var(--sidebar-border);
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-shrink: 0;
+  }
+
+  &__user {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    min-width: 0;
+  }
+
+  &__avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+
+  &__avatar-fallback {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent-border);
+    color: var(--accent-text);
+    font-size: $text-xs;
+    font-weight: $weight-semibold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 1px;
+  }
+
+  &__user-name {
+    font-size: $text-sm;
+    font-weight: $weight-medium;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__user-email {
+    font-size: $text-xs;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-2;
+    border-radius: $radius-md;
+    color: var(--text-tertiary);
+    transition: color $transition-fast, background $transition-fast;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $color-error;
+      background: $color-error-bg;
+    }
+  }
+}

@@ -1,0 +1,71 @@
+// ============================================================
+// Imported into every SCSS file via vite additionalData.
+// ============================================================
+
+// ── Typography ───────────────────────────────────────────────
+$font-sans:  'Geist', system-ui, sans-serif;
+$font-mono:  'Geist Mono', 'Fira Code', monospace;
+
+$text-xs:    11px;
+$text-sm:    12px;
+$text-base:  13px;
+$text-md:    14px;
+$text-lg:    16px;
+$text-xl:    20px;
+$text-2xl:   24px;
+$text-3xl:   30px;
+
+$weight-regular:  400;
+$weight-medium:   500;
+$weight-semibold: 600;
+
+// ── Spacing ──────────────────────────────────────────────────
+$space-1:  4px;
+$space-2:  8px;
+$space-3:  12px;
+$space-4:  16px;
+$space-5:  20px;
+$space-6:  24px;
+$space-8:  32px;
+$space-10: 40px;
+$space-12: 48px;
+
+// ── Radius ───────────────────────────────────────────────────
+$radius-sm: 4px;
+$radius-md: 6px;
+$radius-lg: 8px;
+
+// ── Transition ───────────────────────────────────────────────
+$transition-fast: 120ms ease;
+$transition-base: 200ms ease;
+
+// ── Layout ───────────────────────────────────────────────────
+$sidebar-width:  220px;
+$topbar-height:  52px;
+
+// ── Breakpoints ──────────────────────────────────────────────
+// Mobile-first. Use these mixins everywhere, never raw px values.
+$bp-sm:  480px;   // large phones (landscape)
+$bp-md:  768px;   // tablets
+$bp-lg:  1024px;  // small desktops / sidebar threshold
+
+@mixin mobile  { @media (max-width: #{$bp-md - 1px}) { @content; } }
+@mixin tablet  { @media (min-width: $bp-md) and (max-width: #{$bp-lg - 1px}) { @content; } }
+@mixin desktop { @media (min-width: $bp-lg) { @content; } }
+
+// ── Status colours (semantic, shared between themes) ─────────
+$color-success:        #22c55e;
+$color-success-bg:     rgba(#22c55e, 0.08);
+$color-success-border: rgba(#22c55e, 0.2);
+
+$color-error:          #ef4444;
+$color-error-bg:       rgba(#ef4444, 0.08);
+$color-error-border:   rgba(#ef4444, 0.2);
+
+$color-warning:        #f59e0b;
+$color-warning-bg:     rgba(#f59e0b, 0.08);
+$color-warning-border: rgba(#f59e0b, 0.2);
+
+$color-info:           #3b82f6;
+$color-info-bg:        rgba(#3b82f6, 0.08);
+$color-info-border:    rgba(#3b82f6, 0.2);

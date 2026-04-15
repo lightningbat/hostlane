@@ -1,0 +1,79 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  border-radius: $radius-md;
+  font-family: $font-sans;
+  font-weight: $weight-medium;
+  white-space: nowrap;
+  transition: background $transition-fast, color $transition-fast, border-color $transition-fast, opacity $transition-fast;
+  cursor: pointer;
+  border: 1px solid transparent;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  // ── Sizes ────────────────────────────────────────────────
+  &--sm {
+    height: 28px;
+    padding: 0 $space-3;
+    font-size: $text-sm;
+  }
+
+  &--md {
+    height: 34px;
+    padding: 0 $space-4;
+    font-size: $text-base;
+  }
+
+  // ── Variants ─────────────────────────────────────────────
+  &--primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+
+    &:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+  }
+
+  &--secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border-default);
+
+    &:hover:not(:disabled) { background: var(--bg-hover); border-color: var(--border-strong); }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--text-secondary);
+
+    &:hover:not(:disabled) { background: var(--bg-hover); color: var(--text-primary); }
+  }
+
+  &--danger {
+    background: transparent;
+    color: $color-error;
+    border-color: $color-error-border;
+
+    &:hover:not(:disabled) { background: $color-error-bg; }
+  }
+
+  // ── Loading ──────────────────────────────────────────────
+  &--loading { pointer-events: none; }
+
+  &__spinner {
+    width: 13px;
+    height: 13px;
+    border: 1.5px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

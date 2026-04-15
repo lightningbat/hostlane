@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "target": "ES2022",
+    "module": "nodenext",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "skipLibCheck": true,
+
+    /* Strictness & Safety */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "isolatedModules": true,
+
+    /* Module Handling */
+    "verbatimModuleSyntax": true,
+    "noUncheckedSideEffectImports": true,
+
+    /* Emit (Output) Settings */
+    "sourceMap": true,
+    "removeComments": true,
+    "noEmitOnError": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,61 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  padding: 2px $space-2;
+  border-radius: 99px;
+  font-size: $text-xs;
+  font-weight: $weight-medium;
+  border: 1px solid transparent;
+  white-space: nowrap;
+
+  &__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  // ── Status variants ──────────────────────────────────────
+  &--live {
+    color: $color-success;
+    background: $color-success-bg;
+    border-color: $color-success-border;
+
+    .badge__dot { animation: pulse 2s ease-in-out infinite; }
+  }
+
+  &--failed {
+    color: $color-error;
+    background: $color-error-bg;
+    border-color: $color-error-border;
+  }
+
+  &--uploading,
+  &--extracting,
+  &--validating {
+    color: $color-warning;
+    background: $color-warning-bg;
+    border-color: $color-warning-border;
+
+    .badge__dot { animation: pulse 1s ease-in-out infinite; }
+  }
+
+  &--ready {
+    color: $color-info;
+    background: $color-info-bg;
+    border-color: $color-info-border;
+  }
+
+  &--archived {
+    color: var(--text-tertiary);
+    background: var(--bg-elevated);
+    border-color: var(--border-subtle);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}

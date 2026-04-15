@@ -1,0 +1,25 @@
+// global.scss — single entry point imported in main.tsx
+// theme.scss and reset.scss contain no SCSS variables,
+// so @use works fine. The token additionalData injection
+// applies to module files (.module.scss) and this file.
+
+@use 'theme';
+@use 'reset';
+
+// ── Base body styles (needs tokens — lives here, not in reset) ──
+body {
+  font-family: $font-sans;
+  font-size: $text-base;
+  font-weight: $weight-regular;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: $radius-sm;
+}

@@ -1,0 +1,164 @@
+.deploy-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  &__body {
+    padding: $space-8;
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+
+    @include mobile {
+      padding: $space-4;
+      gap: $space-5;
+    }
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: $text-sm;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  // Side-by-side on desktop, stacked on mobile
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-6;
+    max-width: 900px;
+    align-items: start;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: $space-5;
+    }
+
+    @include tablet {
+      grid-template-columns: 1fr;
+      gap: $space-5;
+    }
+  }
+
+  &__upload-panel,
+  &__progress-panel {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+
+  &__panel-header {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+
+  &__panel-title {
+    font-size: $text-md;
+    font-weight: $weight-semibold;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  &__panel-sub {
+    font-size: $text-sm;
+    color: var(--text-tertiary);
+    line-height: 1.5;
+  }
+
+  &__code {
+    font-family: $font-mono;
+    font-size: $text-xs;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    padding: 1px 5px;
+    border-radius: $radius-sm;
+    color: var(--text-secondary);
+  }
+
+  &__error {
+    font-size: $text-sm;
+    color: $color-error;
+    background: $color-error-bg;
+    border: 1px solid $color-error-border;
+    border-radius: $radius-md;
+    padding: $space-3;
+  }
+
+  &__upload-progress {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__progress-bar {
+    height: 3px;
+    background: var(--bg-elevated);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width $transition-base;
+  }
+
+  &__progress-label {
+    font-size: $text-xs;
+    color: var(--text-tertiary);
+    font-family: $font-mono;
+  }
+
+  &__submit {
+    width: 100%;
+    justify-content: center;
+  }
+
+  &__done-actions {
+    display: flex;
+    gap: $space-3;
+    flex-wrap: wrap;
+  }
+
+  &__log-placeholder {
+    border: 1px dashed var(--border-subtle);
+    border-radius: $radius-lg;
+    padding: $space-8 $space-6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include mobile {
+      padding: $space-6;
+    }
+  }
+
+  &__log-placeholder-text {
+    font-size: $text-sm;
+    color: var(--text-tertiary);
+    text-align: center;
+  }
+
+  &__live-banner {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-3 $space-4;
+    background: $color-success-bg;
+    border: 1px solid $color-success-border;
+    border-radius: $radius-md;
+    color: $color-success;
+    font-size: $text-sm;
+    font-weight: $weight-medium;
+  }
+}

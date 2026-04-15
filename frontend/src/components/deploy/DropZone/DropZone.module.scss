@@ -1,0 +1,128 @@
+.drop-zone {
+  border: 1px dashed var(--border-default);
+  border-radius: $radius-lg;
+  padding: $space-8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $space-3;
+  cursor: pointer;
+  transition: border-color $transition-base, background $transition-base;
+  outline: none;
+  position: relative;
+  min-height: 160px;
+
+  &:hover:not(&--disabled):not(&--error) {
+    border-color: var(--border-strong);
+    background: var(--bg-elevated);
+  }
+
+  &:focus-visible {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-subtle);
+  }
+
+  &--dragging {
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  &--error {
+    border-color: $color-error;
+    background: $color-error-bg;
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &__input {
+    display: none;
+  }
+
+  // ── Prompt (no file) ────────────────────────────────────
+  &__prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-2;
+    text-align: center;
+  }
+
+  &__prompt-icon {
+    color: var(--text-tertiary);
+  }
+
+  &__prompt-title {
+    font-size: $text-base;
+    font-weight: $weight-medium;
+    color: var(--text-primary);
+  }
+
+  &__prompt-hint {
+    font-size: $text-sm;
+    color: var(--text-tertiary);
+  }
+
+  // ── File selected ────────────────────────────────────────
+  &__file {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    width: 100%;
+  }
+
+  &__file-icon {
+    color: var(--accent-text);
+    flex-shrink: 0;
+  }
+
+  &__file-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__file-name {
+    font-size: $text-base;
+    font-weight: $weight-medium;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__file-size {
+    font-size: $text-xs;
+    color: var(--text-tertiary);
+    font-family: $font-mono;
+  }
+
+  &__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-1;
+    border-radius: $radius-sm;
+    color: var(--text-tertiary);
+    transition: color $transition-fast, background $transition-fast;
+    flex-shrink: 0;
+
+    &:hover {
+      color: $color-error;
+      background: $color-error-bg;
+    }
+  }
+
+  // ── Error message ────────────────────────────────────────
+  &__error-msg {
+    font-size: $text-xs;
+    color: $color-error;
+    position: absolute;
+    bottom: $space-3;
+  }
+}

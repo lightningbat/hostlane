@@ -7,6 +7,7 @@ import { requireAuth } from '../middleware/auth.middleware.js';
 import { getSiteByIdForUser } from '../services/site.service.js';
 import {
 	createDeployment,
+	getDeploymentById,
 	updateDeploymentStatus,
 } from '../services/deployment.service.js';
 import { uploadPath, deployDir } from '../utils/paths.utils.js';
@@ -65,18 +66,19 @@ router.post("/:siteId", requireAuth, async (req: Request, res: Response) => {
 				target_dir: deployDir(siteId, deploymentId),
 			});
 		} catch (err) {
-			await updateDeploymentStatus(deploymentId, 'FAILED', {error_msg: 'Failed to enqueue work'});
+			await updateDeploymentStatus(deploymentId, 'FAILED', { error_msg: 'Failed to enqueue work' });
 			throw err;
 		}
 
 		return res.status(202).json({
+			deployment_id: deploymentId,
 			sse_url: `/api/deploy/${deploymentId}/status`,
 		});
 	} catch (err) {
 		// cleanup partial or final file if exists
-		await fs.unlink(upload_path).catch(() => {});
+		await fs.unlink(upload_path).catch(() => { });
 		console.error(err)
-		return res.status(400).json({error: 'Deloyment Failed'})
+		return res.status(400).json({ error: 'Deloyment Failed' })
 	}
 });
 
@@ -85,38 +87,64 @@ router.post("/:siteId", requireAuth, async (req: Request, res: Response) => {
 // Streams deployment status events until LIVE or FAILED.
 // Heartbeat every 20 s keeps proxies/load-balancers from dropping the connection.
 
-router.get('/:deploymentId/status', requireAuth, (req: Request, res: Response) => {
-	const deploymentId = Number(req.params.deploymentId);
+// deploy.routes.ts
 
-	res.setHeader('Content-Type', 'text/event-stream');
-	res.setHeader('Cache-Control', 'no-cache, no-transform');
-	res.setHeader('Connection', 'keep-alive');
-	res.setHeader('X-Accel-Buffering', 'no'); // disable nginx buffering
-	res.flushHeaders();
+// GET /api/deploy/:deploymentId/status  (SSE)
+router.get('/:deploymentId/status', requireAuth, async (req: Request, res: Response) => {
+	const deploymentId  = req.params.deploymentId
 
-	const send = (event: DeployEvent) => {
-		res.write(`data: ${JSON.stringify(event)}\n\n`);
-	};
+	res.setHeader('Content-Type', 'text/event-stream')
+	res.setHeader('Cache-Control', 'no-cache, no-transform')
+	res.setHeader('Connection', 'keep-alive')
+	res.setHeader('X-Accel-Buffering', 'no')
+	res.flushHeaders()
 
-	const listener = (event: DeployEvent) => {
-		send(event);
-		if (event.status === 'LIVE' || event.status === 'FAILED') {
-			cleanup();
-			res.end();
-		}
-	};
+	if (typeof deploymentId !== 'string') return res.end()
 
-	const eventKey = `deployment:${deploymentId}`;
-	deployEvents.on(eventKey, listener);
-
-	const heartbeat = setInterval(() => res.write(': ping\n\n'), 20_000);
-
-	function cleanup() {
-		deployEvents.off(eventKey, listener);
-		clearInterval(heartbeat);
+	const send = (status: string, message?: string) => {
+		res.write(`data: ${JSON.stringify({ deployment_id: deploymentId, status, message })}\n\n`)
 	}
 
-	req.on('close', cleanup);
-});
+	// ── Snapshot: send current DB state immediately on connect ──
+	// Fix for the race condition where processing finishes
+	// before the client connects to the SSE stream.
+	const current = await getDeploymentById(deploymentId)
+
+	if (!current) {
+		send('FAILED', 'Deployment not found')
+		res.end()
+		return
+	}
+
+	// Send the current status as the very first event
+	send(current.status, current.error_msg ?? undefined)
+
+	// If already in a terminal state, we're done — close immediately.
+	if (current.status === 'LIVE' || current.status === 'FAILED') {
+		res.end()
+		return
+	}
+
+	// ── Still in progress: subscribe to future events ───────────
+	const eventKey = `deployment:${deploymentId}`
+
+	const listener = (event: DeployEvent) => {
+		send(event.status, event.message)
+		if (event.status === 'LIVE' || event.status === 'FAILED') {
+			cleanup()
+			res.end()
+		}
+	}
+
+	deployEvents.on(eventKey, listener)
+	const heartbeat = setInterval(() => res.write(': ping\n\n'), 20_000)
+
+	function cleanup() {
+		deployEvents.off(eventKey, listener)
+		clearInterval(heartbeat)
+	}
+
+	req.on('close', cleanup)
+})
 
 export default router;

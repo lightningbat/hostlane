@@ -7,8 +7,8 @@ import {
 	getSitesByUser,
 	getSiteByIdForUser,
 	deleteSite,
-	setCustomDomain,
-	removeCustomDomain,
+	// setCustomDomain,
+	// removeCustomDomain,
 } from '../services/site.service.js';
 import {
 	getDeploymentsBySite,
@@ -34,7 +34,6 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
 
 	try {
 		const site = await createSite(req.userId!, name);
-		console.log('Database entry succesful')
 		await generateNginxConfigForSite({siteId: site.id, subdomain: site.subdomain})
 		res.status(201).json({ site });
 	} catch (err: any) {

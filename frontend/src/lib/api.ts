@@ -54,7 +54,7 @@ export const api = {
 		file: File,
 		onProgress?: (pct: number) => void,
 	) =>
-		new Promise<{ deployment_id: number; version: string; sse_url: string }>(
+		new Promise<{ deployment_id: string; sse_url: string }>(
 			(resolve, reject) => {
 				const xhr = new XMLHttpRequest()
 				const form = new FormData()
@@ -66,7 +66,11 @@ export const api = {
 				}
 				xhr.onload = () => {
 					const data = JSON.parse(xhr.responseText)
-					xhr.status >= 400 ? reject(new Error(data.error)) : resolve(data)
+					if (xhr.status >= 400) {
+						reject(new Error(data.error));
+					} else {
+						resolve(data);
+					}
 				}
 				xhr.onerror = () => reject(new Error('Upload failed'))
 				xhr.open('POST', `/api/deploy/${siteId}`)

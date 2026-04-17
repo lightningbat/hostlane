@@ -27,15 +27,11 @@ export function NewSitePage() {
 
 		try {
 			const { site } = await api.createSite(name.trim())
-			toast.success(`"${site.name}" created`)
+			toast.success(`"${name}" created`)
 			// After creation go straight to deploy page
 			navigate(`/sites/${site.id}/deploy`)
 		} catch (err) {
-			if (err instanceof Error && err.message?.includes('taken')) {
-				setServerError('That slug is already taken — try another one')
-			} else {
-				setServerError(err instanceof Error ? err.message : 'An unexpected error occurred')
-			}
+			setServerError(err instanceof Error ? err.message : 'An unexpected error occurred')
 		} finally {
 			setSubmitting(false)
 		}

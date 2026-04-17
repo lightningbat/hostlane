@@ -44,6 +44,7 @@ function emit(deploymentId: string, status: string, message?: string) {
 		event.message = message;
 	}
 	deployEvents.emit(`deployment:${deploymentId}`, event);
+	console.log('deployEvents: ', event)
 }
 
 // ─── Queue & active-job tracking ─────────────────────────────────────────────
@@ -67,7 +68,6 @@ export function enqueue(job: WorkerJob): void {
 function drain(): void {
 	while (activeJobs.size < MAX_WORKERS && queue.length > 0) {
 		const job = queue.shift()!;
-		console.log("JOB: ", job)
 		spawnWorker(job);
 	}
 }
@@ -144,15 +144,11 @@ async function handleMessage(workerId: number, msg: WorkerMessage): Promise<void
 
 	if (msg.type === 'result') {
 		const m = msg as WorkerResult;
-		console.log("msgg: ", m)
 		console.log(`[Worker ${workerId}] Deployment ${m.deployment_id} → ${m.result_ok ? 'Successed': 'Failed'}`);
 
-		console.log("ENTER result block");
 		if (m.result_ok) {
-			console.log("onSuccess")
 			await onSuccess(m.deployment_id);
 		} else {
-			console.log("onFailure")
 			await onFailure(m.deployment_id, m.error ?? 'Worker reported failure', m.failed_stage);
 		}
 	}

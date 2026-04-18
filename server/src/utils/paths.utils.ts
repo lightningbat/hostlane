@@ -21,4 +21,4 @@ export function liveLink(siteId: number): string {
 // Storage path for storing generated site's nginx config
 export const nginxDir = path.join(ROOT_STORAGE, 'config')
 
-export const defaultSite = path.join(ROOT_STORAGE, 'default_site')
+export const defaultSite = path.join(ROOT_STORAGE, 'default-page')

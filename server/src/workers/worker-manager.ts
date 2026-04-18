@@ -44,7 +44,6 @@ function emit(deploymentId: string, status: string, message?: string) {
 		event.message = message;
 	}
 	deployEvents.emit(`deployment:${deploymentId}`, event);
-	console.log('deployEvents: ', event)
 }
 
 // ─── Queue & active-job tracking ─────────────────────────────────────────────

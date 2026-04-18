@@ -10,6 +10,7 @@ import sitesRoutes from './routes/sites.routes.js';
 import deployRoutes from './routes/deploy.routes.js';
 import { errorHandler } from './middleware/error.middleware.js';
 import { recoverOnBoot } from './workers/worker-manager.js';
+import { bootstrap } from './bootstrap.js';
 import pool from './db/pool.js';
 import path from 'path';
 
@@ -54,6 +55,8 @@ app.use(errorHandler);
 
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 async function boot(): Promise<void> {
+	// // Initialize required base assets
+	await bootstrap()
 	// Verify DB connectivity before accepting traffic
 	await pool.query('SELECT 1');
 	console.log('[Boot] Database connected');

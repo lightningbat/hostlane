@@ -27,13 +27,14 @@ Hostlane splits concerns between a management API and a high-speed worker:
 
 We use a predictable directory structure to manage site state:
 
-```bash
-/var/lib/hostlane/sites/site_<id>/
-├── uploads/       # Raw .zip files
-├── deployments/   # Extracted versions
-│   └── v1/
-│   └── v2/
-└── current        # Symlink to the active deployment
+```text
+/var/lib/hostlane/
+├── config/             # Generated Nginx site configs (Staging)
+└── sites/
+    └── site_<id>/
+        ├── uploads/    # Deployment artifacts (.zip)
+        ├── deployments/# Extracted versions
+        └── current -> deployments/deploy_<id>
 ```
 
 ---
@@ -47,19 +48,55 @@ We use a predictable directory structure to manage site state:
 
 ---
 
-## 🛠 Setup & Development
+## ⚙️ Installation & Setup
 
-### Nginx Integration
-Hostlane manages site configs in `/etc/nginx/hostlane/`. To allow the app to trigger reloads securely, add this to your sudoers:
+### 1. Storage Configuration
+By default, Hostlane uses `/var/lib/hostlane/` for deployments and configuration. You can override this by setting `ROOT_STORAGE` in your `.env` file.
+
+You must create the directory and grant ownership to the user running the API server:
+```bash
+sudo mkdir -p /var/lib/hostlane/{sites,config}
+sudo chown -R <app-user>:<app-user> /var/lib/hostlane/
+```
+* **sites/**: Stores uploads and extracted deployments.
+* **config/**: Acts as a staging area where the server generates Nginx configs before they are synced to the system.
+
+### 2. Nginx Helper Script
+The system requires a dedicated script to validate and reload Nginx. Copy it from the source to your local bin:
 
 ```bash
-# Allow hostlane-user to reload nginx safely
-hostlane-user ALL=(root) NOPASSWD: /usr/local/bin/hostlane-nginx-reload.sh
+sudo cp scripts/hostlane-nginx-reload.sh /usr/local/bin/
+sudo chmod +x /usr/local/bin/hostlane-nginx-reload.sh
 ```
 
-### Getting Started
+Then, allow the app user to execute it without a password prompt by adding this to `visudo`:
 ```bash
-npm install
-npm run build
-npm start
+<app-user> ALL=(root) NOPASSWD: /usr/local/bin/hostlane-nginx-reload.sh
+```
+
+### 3. SSL Configuration
+Hostlane expects a wildcard SSL configuration for site delivery. Create a snippet at `/etc/nginx/snippets/ssl-wildcard.conf`:
+
+```nginx
+# /etc/nginx/snippets/ssl-wildcard.conf
+ssl_certificate /path/to/your/fullchain.pem;
+ssl_certificate_key /path/to/your/privkey.pem;
+```
+
+---
+
+## 🛠 Building from Source
+
+**Prerequisites:**
+* Node.js (v18+)
+* Go (1.20+)
+
+Run the build script from the project root:
+
+```bash
+# Make the script executable
+chmod +x scripts/build.sh
+
+# Run the build
+./scripts/build.sh
 ```

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, CheckCircle } from 'lucide-react'
 import { api } from '@/lib/api'
 import { Topbar } from '@/components/layout/Topbar/Topbar'
@@ -13,7 +13,6 @@ type Phase = 'idle' | 'uploading' | 'processing' | 'done'
 
 export function DeployPage() {
 	const { siteId } = useParams<{ siteId: string }>()
-	const navigate = useNavigate()
 	const toast = useToast()
 
 	const [file, setFile] = useState<File | null>(null)

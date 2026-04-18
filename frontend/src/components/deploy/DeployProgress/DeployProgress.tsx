@@ -2,6 +2,7 @@ import { Check, X, Loader } from 'lucide-react'
 import { useDeployStatus } from '@/hooks/useDeployStatus'
 import type { DeploymentStatus } from '@/types'
 import styles from './DeployProgress.module.scss'
+import { useEffect } from 'react'
 
 interface Props {
 	deploymentId: string
@@ -23,9 +24,12 @@ export function DeployProgress({ deploymentId, onDone }: Props) {
 	const { status, message, done } = useDeployStatus(deploymentId)
 	const currentOrder = status ? (ORDER[status] ?? -1) : -1
 
-	if (done && onDone) {
-		setTimeout(() => onDone(status === 'LIVE'), 1500)
-	}
+	useEffect(() => {
+		if (done && onDone) {
+			setTimeout(() => onDone(status === 'LIVE'), 500)
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [status, done])
 
 	return (
 		<div className={styles['deploy-progress']}>
@@ -47,8 +51,8 @@ export function DeployProgress({ deploymentId, onDone }: Props) {
 			<div className={styles['deploy-progress__steps']}>
 				{STEPS.map((step, i) => {
 					const stepOrder = ORDER[step.status] ?? i
-					const isComplete = currentOrder > stepOrder
-					const isActive = currentOrder === stepOrder && status !== 'FAILED'
+					const isComplete = status === 'LIVE' || currentOrder > stepOrder
+					const isActive = status !== 'LIVE' && currentOrder === stepOrder && status !== 'FAILED'
 					const isFailed = status === 'FAILED' && stepOrder === currentOrder
 
 					return (

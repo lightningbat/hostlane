@@ -1,6 +1,6 @@
 # Hostlane
 
-**Hostlane** is a high-performance, multi-tenant platform designed to make static site deployments as simple as a `zip` upload. It handles the heavy lifting of versioning, symlink-based rollbacks, and Nginx orchestration so you don't have to.
+**Hostlane** is a multi-tenant platform designed to make static site deployments as simple as a `zip` upload. It handles the heavy lifting of versioning, symlink-based rollbacks, and Nginx orchestration so you don't have to.
 
 ---
 

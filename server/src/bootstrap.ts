@@ -22,7 +22,7 @@ export async function bootstrap() {
 	await fs.mkdir(configDir, { recursive: true });
 
 	// Copy catch-all nginx config if missing
-	const confSrc = path.join(import.meta.dirname, '..', '..', '00-global-redirect.conf');
+	const confSrc = path.join(import.meta.dirname, '..', '..', 'scripts', '00-global-redirect.conf');
 	const confDest = path.join(configDir, "00-global-redirect.conf");
 
 	try {

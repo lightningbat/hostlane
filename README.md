@@ -4,7 +4,7 @@
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 * **Atomic Deployments:** Instant rollbacks via symlink switching.
 * **Multi-tenant Architecture:** Isolate sites and deployments by ID.
@@ -13,7 +13,7 @@
 * **Secure Reloads:** Controlled Nginx reloads via a dedicated, root-owned helper script.
 ---
 
-## 🏗 Architecture
+## Architecture
 
 Hostlane splits concerns between a management API and a high-speed worker:
 
@@ -23,7 +23,7 @@ Hostlane splits concerns between a management API and a high-speed worker:
 
 ---
 
-## 📂 Filesystem Strategy
+## Filesystem Strategy
 
 We use a predictable directory structure to manage site state:
 
@@ -39,7 +39,7 @@ We use a predictable directory structure to manage site state:
 
 ---
 
-## 🔄 The Lifecycle
+## The Lifecycle
 
 1. **Push:** Upload a `.zip` via the API.
 2. **Process:** The Go worker extracts it to a unique deployment directory.
@@ -48,7 +48,7 @@ We use a predictable directory structure to manage site state:
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 ### 1. Storage Configuration
 By default, Hostlane uses `/var/lib/hostlane/` for deployments and configuration. You can override this by setting `ROOT_STORAGE` in your `.env` file.
@@ -85,7 +85,7 @@ ssl_certificate_key /path/to/your/privkey.pem;
 
 ---
 
-## 🛠 Building from Source
+## Building from Source
 
 **Prerequisites:**
 * Node.js (v18+)
@@ -100,3 +100,29 @@ chmod +x scripts/build.sh
 # Run the build
 ./scripts/build.sh
 ```
+
+---
+
+## Production Directory Layout
+
+The runtime environment expects the project directory to have the following layout:
+
+```text
+.
+├── default-page/
+│   └── index.html                # Placeholder page served for sites created before their first deployment
+├── frontend/
+│   └── dist/                     # Compiled frontend dashboard assets
+├── scripts/
+│   ├── 00-global-redirect.conf   # Nginx config redirecting HTTP wildcard site requests to HTTPS
+│   ├── build.sh                  # Project build pipeline
+│   └── hostlane-nginx-reload.sh  # Sudoers helper for Nginx validation & reload
+├── server/
+│   ├── dist/                     # Compiled API backend
+│   ├── node_modules/
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── schema.sql                # Database initialization schema
+│   └── tsconfig.json
+└── worker/
+    └── bin/                      # Compiled Go worker binary
